@@ -1,0 +1,21 @@
+---
+title: "Assessing whether there was an association between anxiety levels and threat estimation during the Covid-19 pandemic across four European countries"
+author: "Irene James"
+date: "2024-11-27"
+output: 
+  html_document: 
+   theme: cerulean
+   toc: true
+   toc_float: true
+ 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+
+```
+
+
