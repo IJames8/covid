@@ -3,7 +3,7 @@ title: "Assessing whether there was an association between anxiety levels and th
 author: "Irene James"
 date: "2024-11-27"
 output: 
-  html_document: 
+  html_document: default
    theme: cerulean
    toc: true
    toc_float: true
@@ -18,4 +18,70 @@ library(here)
 
 ```
 
+## Project Description
+
+This project is an assessed piece of work as part of the MSc Psychological Research Methods with Data Science course at the University of Sheffield. The assessment requires students to produce a visualisation of an open source dataset using R. In line with the movement towards increasing the reproducibility of scientific findings, the processes employed for the of data visualisation, along with the associated code for the exploratory data analysis are reported. 
+
+## Background 
+
+The entire world was impacted by the effects of the Covid-19 (SARS-CoV-2) virus as it resulted in a pandemic. Following the rapid spread of the disease, many countries took action by implementing lockdown measures and introducing social distancing and hygiene protocols (Miyah et al., 2022). 
+
+The data collected during this period is plentiful and has provided new insights into human behaviour when faced with the uncertainty of a novel and harmful disease. Using an online survey, Abadi et al., (2023) obtained data from 2031 participants from the UK, Spain, Germany and Netherlands. The authors report that they chose to include these specific countries on the basis that each differed significantly on the number of Covid-19 related deaths at the time of the survey completion, where Spain had the most number of cases, followed by the UK,the Netherlands and Germany. Moreover, the implementation of lockdown by these countries' respective governments and the socio-political attitudes within their differed. Participants who engaged with the survey completed measures on several variables of interest, such as socio-political attitudes, conspiracy mentality and perceptions of threat, to name a few. 
+
+The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article. 
+
+
+
+## Data Origins
+
+The research paper for this data visualisation was retrieved from: https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86
+
+The data was retrived from: ...
+
+The codebook for the study was retrieved from:  
+
+The authors of the paper have indicated that their dataset is published under the CC BY-SA license. This allows the re-use of the data, provided that the original authors are acknowledged. 
+
+
+```{r}
+
+```
+
+
+
+
+### Import the data
+
+
+## Research Question
+Hypothesis based on the information given. 
+
+
+## Data Preparation
+
+### Wrangle the data
+
+
+## Visualisation
+
+### Load the dependancies for the visualisation
+
+## Summary
+
+What the graph suggests. What may be the limitations/strengths in the data. Critical evaluation comments on the questionnaire items, potential bias.
+
+
+
+What are some of the strengths? 
+
+## Follow up
+
+How might the visualisation be better. 
+
+## References
+
+Abadi, D., Arnaldo, I., & Fischer,A. (2023). A Dataset of SocialPsychological and EmotionalReactions During the COVID-19 Pandemic Across FourEuropean Countries. *Journal of Open Psychology Data*, 11:
+11, pp. 1–11. DOI: https://doi.org/10.5334/jopd.86
+
+Miyah, Y., Benjelloun, M., Lairini, S., & Lahrichi, A. (2022). COVID-19 impact on public health, environment, human psychology, global socioeconomy, and education. *The Scientific World Journal*, 2022(5578284) 1-8. https://doi.org/10.1155/2022/5578284.
 
