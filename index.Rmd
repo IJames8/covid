@@ -3,12 +3,13 @@ title: "Assessing whether there was an association between anxiety levels and th
 author: "Irene James"
 date: "2024-11-27"
 output: 
-  html_document: default
+ html_document:
    theme: cerulean
    toc: true
    toc_float: true
- 
 ---
+
+![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -31,23 +32,11 @@ The data collected during this period is plentiful and has provided new insights
 The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article. 
 
 
-
 ## Data Origins
 
-The research paper for this data visualisation was retrieved from: https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86
-
-The data was retrived from: ...
-
-The codebook for the study was retrieved from:  
+The data and codebook was retrieved from the authors'*figshare* repository which is available [here](https://uvaauas.figshare.com/articles/dataset/A_Dataset_of_Social-Psychological_and_Emotional_Reactions_during_the_COVID-19_Pandemic_across_Four_European_Countries/17085719?file=41458140)
 
 The authors of the paper have indicated that their dataset is published under the CC BY-SA license. This allows the re-use of the data, provided that the original authors are acknowledged. 
-
-
-```{r}
-
-```
-
-
 
 
 ### Import the data
@@ -64,7 +53,7 @@ Hypothesis based on the information given.
 
 ## Visualisation
 
-### Load the dependancies for the visualisation
+
 
 ## Summary
 
