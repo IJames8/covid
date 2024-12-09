@@ -1,71 +1,434 @@
 ---
-title: "Assessing whether there was an association between anxiety levels and threat estimation during the Covid-19 pandemic across four European countries"
-author: "Irene James"
+title: "Assessing the association between anxiety levels and threat estimation during
+  the Covid-19 pandemic across four European countries."
+author:
 date: "2024-11-27"
-output: 
- html_document:
-   theme: cerulean
-   toc: true
-   toc_float: true
+output:
+    toc: true
+  html_document:
+    theme: cerulean
+    toc: true
+    toc_float: true
+
 ---
 
 ![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg)
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include= TRUE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 10, fig.height = 8, dpi = 300)
 
 library(tidyverse)
 library(here)
-
+library(dplyr)
+library(ggplot2)
+library(extrafont)
 ```
 
 ## Project Description
 
 This project is an assessed piece of work as part of the MSc Psychological Research Methods with Data Science course at the University of Sheffield. The assessment requires students to produce a visualisation of an open source dataset using R. In line with the movement towards increasing the reproducibility of scientific findings, the processes employed for the of data visualisation, along with the associated code for the exploratory data analysis are reported. 
 
-## Background 
+### Background 
 
 The entire world was impacted by the effects of the Covid-19 (SARS-CoV-2) virus as it resulted in a pandemic. Following the rapid spread of the disease, many countries took action by implementing lockdown measures and introducing social distancing and hygiene protocols (Miyah et al., 2022). 
 
 The data collected during this period is plentiful and has provided new insights into human behaviour when faced with the uncertainty of a novel and harmful disease. Using an online survey, Abadi et al., (2023) obtained data from 2031 participants from the UK, Spain, Germany and Netherlands. The authors report that they chose to include these specific countries on the basis that each differed significantly on the number of Covid-19 related deaths at the time of the survey completion, where Spain had the most number of cases, followed by the UK,the Netherlands and Germany. Moreover, the implementation of lockdown by these countries' respective governments and the socio-political attitudes within their differed. Participants who engaged with the survey completed measures on several variables of interest, such as socio-political attitudes, conspiracy mentality and perceptions of threat, to name a few. 
 
-The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article. 
-
 
 ## Data Origins
 
-The data and codebook was retrieved from the authors'*figshare* repository which is available [here](https://uvaauas.figshare.com/articles/dataset/A_Dataset_of_Social-Psychological_and_Emotional_Reactions_during_the_COVID-19_Pandemic_across_Four_European_Countries/17085719?file=41458140)
+The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article. 
+
+The data and codebook was retrieved from the authors'*figshare* repository which is available [here](https://uvaauas.figshare.com/articles/dataset/A_Dataset_of_Social-Psychological_and_Emotional_Reactions_during_the_COVID-19_Pandemic_across_Four_European_Countries/17085719?file=41458140).
 
 The authors of the paper have indicated that their dataset is published under the CC BY-SA license. This allows the re-use of the data, provided that the original authors are acknowledged. 
 
+The URL is this visualisation project is [here](https://ijames8.github.io/covid/)
+
+The repository for these pages is: https://github.com/IJames8/covid.git
 
 ### Import the data
 
+```{r import}
+
+ 
+raw_data <- read.csv("data/raw_data.csv")
+
+head(raw_data)
+
+# check that the data has imported properly. The number of observations and variables appears to be correct. 
+```
+
 
 ## Research Question
-Hypothesis based on the information given. 
+
+In reviewing the reuse potential of the data as suggested by the Abadi et al., (2013), this data visualisation project aims to investigate whether anxiety around the coronavirus, as indicated by the scores on the anxiety measure, is associated with an overestimation of various threats, such as those related to coronavirus, climate, symbolic/material or safety, as indicated by the scores on the threat estimation measure for each participant. 
 
 
 ## Data Preparation
 
+For this particular visualisation, the codebook indicates that the variables of interest are items 5.1 -5.5. These relate to anxiety about coronavirus. It is important to note that item 5.3. is reverse coded. Variables 16.1 - 16.3 (threat estimation around cornoavirus) and 17.1 - 17.12 (threat estimation around climate, symbolic, material and safety) are also needed as these relate to the scores around threat estimation. Within this category, items 16.3, 16.4 and 17.10 are reverse coded.  
+
+The remaining items will be removed from the dataframe, leaving only information about the relevant variables, along with annonymised participant ID and country. 
+
 ### Wrangle the data
+
+```{r tidy df}
+
+# remove the unwanted variables. 
+
+df1 <- raw_data %>% 
+  select(-A3.1 : -A3.10, -A6.1 : -A14.4, -A18.1:-A40.11)
+
+```
+
+```{r reverse scored items and tidy the dataframe}
+
+# Items 5.3, 16.3, 16.4 and 17.10, are reverse coded. This will need to be adjusted in the dataframe.
+# Item 5.3. is scored on a scale from 1 - 10. High scores indicate, high levels of anxiety.
+# Item 16.4 and 16.3 are scored on a scale from 1 - 10. High scores indicate, high levels of threat estimation coronavirus.
+# Item 17.10. is scored on a scale from 1 - 10. High scores indicate, high levels of threat estimation. 
+
+#Create function to reverse score the items indicated in the codebook. Utilising the " N-plus-one-minus-x" method, the new score is calculated by subtracting the obtained raw score (x) from 11 since the scale is from 1 to 10 (n-plus-1). 
+
+reversed_scores <- function(df1, columns, max_score = 11) {
+  df1 %>% 
+    mutate(across(all_of(columns), ~ max_score - ., .names = "{.col}_reversed"))
+  }
+
+# Apply the function to relevant items and assign this to an updated dataframe.
+df2 <- reversed_scores(df1, c("A5.3.", "A16.3.", "A16.4.", "A17.10."))
+
+
+# View the dataframe to check that new columns have been added to df2 for the reversed scored items. Check that the reversed scores look right and makes sense. 
+
+head(df2)
+
+# Remove old scores and replace with reversed scores.
+
+df2$A5.3. <- df2$A5.3._reversed  
+df2$A16.3. <- df2$A16.3._reversed
+df2$A16.4. <- df2$A16.4._reversed
+df2$A17.10. <- df2$A17.10._reversed
+
+
+# Delete the reversed score columns at the end so it is less confusing and assign this to new dataframe. 
+
+df3 <- select(df2, -c(A5.3._reversed, A16.3._reversed, A16.4._reversed, A17.10._reversed))
+
+# Check that this has transferred correctly. 
+
+head(df3)
+
+```
+
+```{r add mean score columns}
+
+# Calculate mean score for anxiety around Covid-19 and the mean for threat variables for each participant.
+
+anxiety_mean <- rowMeans(df3[, c("A5.1","A5.2", "A5.3.", "A5.4", "A5.5")]) #, na.rm = TRUE)
+
+c19_threat_mean <- rowMeans(df3[, c("A16.1", "A16.2", "A16.3.", "A16.4.", "A16.5", "A16.6")]) #, na.rm = TRUE)
+
+safety_threat_mean <-  rowMeans(df3[, c("A17.1", "A17.2", "A17.3", "A17.4", "A17.5", "A17.6", "A17.7", "A17.8", "A17.9", "A17.10.", "A17.11", "A17.12")]) #, na.rm = TRUE)
+
+
+# Add mean score for anxiety to dataframe
+
+df3$anxiety_mean <- anxiety_mean
+df3$c19_threat_mean <- c19_threat_mean
+df3$safety_threat_mean <- safety_threat_mean
+
+
+# Remove the individual questionnaire scores now that the mean has been calculated for the variables of interest.
+
+df4 <- df3[, -c(3:25)]
+
+# Recode the country column
+
+df5 <- df4 %>% 
+  mutate(Country = recode(Country,
+                          '1' = "Germany",
+                          '2' = "Spain",
+                          '3' = "Netherlands",
+                          '4' = "UK"))
+
+# Check that the new dataframe has all the relevant information needed. 
+
+
+head(df5)
+
+
+#As df5 is in wide format, it will need to be converted to long format. 
+
+long_data <- df5%>%
+  pivot_longer(cols = c("anxiety_mean", "c19_threat_mean", "safety_threat_mean"), 
+               names_to = "Variable",
+               values_to = "Score")
+head(long_data)
+
+# Aggregate variables to produce a summaried overall mean score for each variable according to the country. 
+
+data_summary <-  long_data %>%
+  group_by(Country, Variable) %>% 
+  summarise( mean_score= mean(Score), .groups = "drop")
+
+
+# Creating factors as the countries are categorical data and to prevent issues when creating the plot later on. 
+
+data_summary <- data_summary %>% 
+  mutate(Country = factor (Country, levels = c("Germany", "Netherlands", "Spain", "UK")))
+
+data_summary
+```
 
 
 ## Visualisation
+
+The best way to visualise this data may be through a bar chart with the countries as the categorical variable and the questionnaire scores as continuous. With this, it is possible to check if the predictions made about the data,as stated previosly, are met. 
+
+
+```{r visualisation 1}
+
+# Create a bar chart of anxiety and threat estimation scores for each country.
+
+p <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  
+  # Set Y-axis scale from 0 -10. 
+  
+  ylim(0, 10) +
+  
+  # Add labels
+  
+  labs(
+    title = "Visualisation of Social and Psychological Reactions During the Covid-19\n Pandemic Across Four European Countries",
+    subtitle = "Comparing anxiety levels and threat estimation in relation to Covid-19 and general threat",
+    x = "Country",
+    y = "Mean score on questionnaires",
+    fill = "Questionnaire Items",
+    caption = "Source: A Dataset of Social-Psychological and Emotional Reactions During the COVID-19 Pandemic Across Four European Countries (Abadi et al., 2023)"
+  ) +
+  
+  # Customise by adding complementary colours to aid better viewing experience. 
+  
+  scale_fill_manual(
+    values = c("anxiety_mean" = "#c6cf95", "c19_threat_mean" = "#7fcdbb", "safety_threat_mean" = "#2c7fb8"),
+    labels = c("Anxiety rating", "COVID-19 threat estimation", "General threat estimation")
+  ) +
+  
+  # Customise themes
+  
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = "Times New Roman"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, family = "Times New Roman"),
+    plot.caption = element_text(hjust = 0, face = "italic", family = "Times New Roman"),
+    axis.title = element_text(size = 12, family = "Times New Roman"),
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 10, family = "Times New Roman"),
+    panel.background = element_rect(fill = "#ffffff", color = NA),
+    
+    # Remove the vertical grid lines
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    
+    # Keep the horizontal grid lines
+    panel.grid.major.y = element_line(color = "grey", linewidth = 0.5),
+    
+    # Adding a secondary line makes it easier to estimate the values on the y-axis. 
+    panel.grid.minor.y = element_line(color = "lightgrey", linewidth = 0.25),
+   
+     # Adjust margins
+    plot.margin = margin(10, 10, 10, 10))
+p
+
+
+# plot that with the weekly count cases of c-19 for each country. 
+# the mean anxiety and threat score for each country as a whole needs to be calculated. 
+
+
+```
+
+As predicted, in looking at the average anxiety scores, Spain had marginally higher rating followed by the UK then Germany and Netherlands. In terms of average Covid-19 threat detection score, Spain had the highest scores, followed by the UK, Netherlands and Germany. In terms of general threat estimation, UK scored the highest and Spain the lowest.  
+
+
+### Import data (part 2)
+
+It will be helpful to see the relationship between these findings to that of the total number of  Covid- 19 related deaths for each country. According to Abadi et al., (2023) the data collection for their study took place in April 2020. The European Centre for Disease Prevention and Control (ECDC) provides data on the weekly number of Covid-19 related cases and deaths worldwide.The data for April 2020 is also reported and is available to download from their official website: https://www.ecdc.europa.eu/en/publications-data/download-historical-data-20-june-2022-weekly-number-new-reported-covid-19-cases
+
+```{r import the weekly covid deaths data}
+
+ecdc_raw <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", na.strings = "", fileEncoding = "UTF-8-BOM")
+
+head(ecdc_raw)
+
+
+```
+
+### Wrangle the dataset
+
+This dataset has information on all the countries in the world. For the purpose of this visualisation, only the data for Germany, Netherlands, Spain and UK are needed. 
+
+```{r filter to relevant variables and tidy dataframe}
+
+# Remove all the other countries
+
+ecdc2 <- ecdc_raw %>% 
+  filter(countriesAndTerritories %in% c("Germany", "Netherlands", "Spain", "United_Kingdom"))
+
+# Remove data for all other months, except April. 
+
+ecdc2 <- ecdc2 %>% 
+  filter(month == 4)
+
+# Remove the other wanted variables also. 
+
+ecdc3 <- ecdc2 %>% 
+  select(-day, -month, -year, -cases, -geoId, -countryterritoryCode, -popData2019, -continentExp)
+
+# Calucate the total deaths for April for each country.
+
+total_deaths <- ecdc3 %>% 
+  group_by(countriesAndTerritories) %>% 
+  summarise(total_deaths = sum(deaths, na.rm = TRUE))
+
+# Add total deaths column to dataframe.
+
+ecdc3 <- ecdc3 %>% 
+  left_join(total_deaths, by = "countriesAndTerritories")
+
+
+# Table to display the total deaths calculated for each country in April 2020 when the survey was conducted. 
+
+ecdc_summary <- ecdc3 %>%
+  group_by(countriesAndTerritories, total_deaths) %>%
+  summarise(count = n(), .groups = "drop")%>%
+  select(-count)
+
+ecdc_summary
+
+# Ensure that the names match for the countires
+
+ecdc_summary <- ecdc_summary %>%
+  mutate(countriesAndTerritories = if_else(countriesAndTerritories == "United_Kingdom", "UK", countriesAndTerritories))
+
+ecdc_summary
+
+```
+
+## Final Visualisation
+
+The final visualisation will comprise of the previous graph overlayed with the data around the of number of deaths for each of the four countries. 
+
+
+```{r visualisation 2}
+
+# Adding data around total number of deaths reported to the previous graph. 
+
+p2 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
+  # Bar chart layer
+  geom_bar(stat = "identity", position = "dodge", colour = "black") +
+  
+  # Scatter plot for EDCD data and define the scale for the y-axis. 
+  geom_point(
+    data = ecdc_summary,  
+    aes(x = countriesAndTerritories, y = (total_deaths - 3500) * (10 / 21500), color = "Total Deaths", text = paste("\nCountry: ", countriesAndTerritories, "\nTotal Deaths: ", total_deaths)),  
+    size = 3,
+    inherit.aes = FALSE,
+    show.legend = FALSE) +
+  
+  # Add dashed red line through the points
+  geom_line(
+    data = ecdc_summary,
+    aes(x = as.numeric(factor(countriesAndTerritories)), y = (total_deaths - 3500) * (10 / 21500)),
+    color = "red",
+    linetype = "dashed",
+    
+    # Remove the legend as the axis for the secondary axis will be red
+    inherit.aes = FALSE,
+    show.legend = FALSE) +
+  
+  # Specify the primary and secondary y-axis
+    scale_y_continuous(
+    name = "Mean score on questionnaires",
+    limits = c(0, 10),
+    
+  # Add second axis and specify the scale. 
+    sec.axis = sec_axis(~ . * 21500 / 10 + 3500, 
+      name = "Total number of C-19 deaths reported",
+      labels = scales::label_number()))+
+  
+  # Labels and colors
+  labs(
+    title = "Visualisation of Social and Psychological Reactions During the Covid-19 Pandemic Across Four European Countries",
+    subtitle = "Comparing anxiety levels and threat estimation in relation to Covid-19 and general threat",
+    x = "Country",
+    fill = "Questionnaire Items:  ",
+    caption = "Source: A Dataset of Social-Psychological and Emotional Reactions During the COVID-19 Pandemic Across Four European Countries (Abadi et al., 2023).\nData on total number of deaths as reported by the ECDC for the month of April 2020."
+  ) +
+  scale_fill_manual(
+    values = c("anxiety_mean" = "#c6cf95", "c19_threat_mean" = "#7fcdbb", "safety_threat_mean" = "#2c7fb8"),
+    labels = c("Anxiety rating", "COVID-19 threat estimation", "General threat estimation")
+  ) +
+  
+  # Customise the themes
+  
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = "Times New Roman"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, family = "Times New Roman"),
+    plot.caption = element_text(hjust = 0, face = "italic", family = "Times New Roman"), 
+    
+    
+    # Make the secondary axis and text red so it corresponds with the dashed red line for the death numbers. 
+    axis.title.y.right = element_text(size = 12, color = "red"),  
+    axis.text.y.right = element_text(color = "red"),
+    axis.title = element_text(size = 12, family = "Times New Roman"),
+    axis.ticks.x = element_blank(),
+    
+    # Adjust the legend
+    legend.title = element_text(size = 12, family = "Times New Roman"),
+    legend.text = element_text(size = 7, family = "Times New Roman"),
+    legend.position = c(0.1, 0.82),
+    legend.key = element_rect(colour = NA, fill = NA),
+    
+    
+   # Add white background
+    panel.background = element_rect(fill = "#ffffff", colour = NA),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+   
+    # Keep horizontal lines
+    panel.grid.major.y = element_line(color = "grey", linewidth = 0.5),
+    
+    # Adding a secondary horizontal line makes it easier to estimate the values on the y-axis. 
+    panel.grid.minor.y = element_line(color = "lightgrey", linewidth = 0.25),
+    
+    #Adjust margins
+    plot.margin = margin(30, 20, 20, 30))
+
+p2
+
+```
+```{r save the vidualisation}
+
+```
 
 
 
 ## Summary
 
-What the graph suggests. What may be the limitations/strengths in the data. Critical evaluation comments on the questionnaire items, potential bias.
+The results suggest that participants from Spain reported the highest levels of anxiety and the Netherlands reported the lowest levels according to the questionnaire results. Participants from Spain reported high levels of threat estimation in terms of Covid-19. 
 
+An obvious difference that stood out from this visualisation is the total number of Covid-19 related deaths for each of the four countries. Abadi et al., (2023) reported that at the time of their survey, Spain had the highest number of deaths but the ECDC data indicates that the UK had the highest number of Covid-19 related deaths for the month of April 2020.
 
+The authors report that they obtained a representative sample from each of the countries (approximately 500 people from each country). From this data, there is no significant differences between the countries for these variables that can be observed. Future research may consider recruiting a larger sample which may produced much clearer distinction of the differences in scores. It may be that participant characteristics  may have impacted the outcomes on the survey, e.g., voluntary sample that was willing to complete the surveys. 
 
-What are some of the strengths? 
 
 ## Follow up
 
-How might the visualisation be better. 
+This visualisation may be made better with the addition of an interactive element. I had attempted to make the graph interactive via ggplotly, however I found that this removed some of the helpful labels that I felt was important to the visualisation. It also seemed to remove the secondary axis. Although with the interactive plot, when the cursor hovers over the point, the information is provided, it was felt that this may be confusing at first glance without the secondary axis and may lead to the graph being read wrong.
+
+If additional data is acquired, for example, obtaining data from more countries in Europe and how the population levels of anxiety changed across may be good to vidualise in terms of an interactive line or bar chart. It will also be good to potentially visualise the information of all the countries in Europe in a map. 
 
 ## References
 
