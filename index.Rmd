@@ -12,7 +12,7 @@ output:
     toc_float: true
 ---
 
-<!-- ![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg) -->
+![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg) -->
 
 ```{r setup, include= TRUE}
 knitr::opts_chunk$set(echo = TRUE)
