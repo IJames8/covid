@@ -1,51 +1,52 @@
 ---
-title: "Assessing the association between anxiety levels and threat estimation during
-  the Covid-19 pandemic across four European countries."
-author:
-date: "2024-11-27"
+title: "Assessing whether there was an association between anxiety levels and threat
+  estimation during the Covid-19 pandemic across four European countries"
+Subtitle: 
+date: "2024-11-26"
 output:
+  pdf_document:
     toc: true
   html_document:
     theme: cerulean
     toc: true
     toc_float: true
-
 ---
 
-![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg)
+<!-- ![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg) -->
 
 ```{r setup, include= TRUE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 10, fig.height = 8, dpi = 300)
+knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(here)
 library(dplyr)
 library(ggplot2)
 library(extrafont)
+
+
 ```
 
 ## Project Description
 
-This project is an assessed piece of work as part of the MSc Psychological Research Methods with Data Science course at the University of Sheffield. The assessment requires students to produce a visualisation of an open source dataset using R. In line with the movement towards increasing the reproducibility of scientific findings, the processes employed for the of data visualisation, along with the associated code for the exploratory data analysis are reported. 
+This project is an assessed piece of work as part of the MSc Psychological Research Methods with Data Science course at the University of Sheffield. The assessment requires students to produce a visualisation of an open source dataset using R. In line with the movement towards increasing the reproducibility of scientific findings, the processes employed for the of data visualisation, along with the associated code for the exploratory data analysis are reported.
 
-### Background 
+### Background
 
-The entire world was impacted by the effects of the Covid-19 (SARS-CoV-2) virus as it resulted in a pandemic. Following the rapid spread of the disease, many countries took action by implementing lockdown measures and introducing social distancing and hygiene protocols (Miyah et al., 2022). 
+The entire world was impacted by the effects of the Covid-19 (SARS-CoV-2) virus as it resulted in a pandemic. Following the rapid spread of the disease, many countries took action by implementing lockdown measures and introducing social distancing and hygiene protocols (Miyah et al., 2022).
 
-The data collected during this period is plentiful and has provided new insights into human behaviour when faced with the uncertainty of a novel and harmful disease. Using an online survey, Abadi et al., (2023) obtained data from 2031 participants from the UK, Spain, Germany and Netherlands. The authors report that they chose to include these specific countries on the basis that each differed significantly on the number of Covid-19 related deaths at the time of the survey completion, where Spain had the most number of cases, followed by the UK,the Netherlands and Germany. Moreover, the implementation of lockdown by these countries' respective governments and the socio-political attitudes within their differed. Participants who engaged with the survey completed measures on several variables of interest, such as socio-political attitudes, conspiracy mentality and perceptions of threat, to name a few. 
-
+The data collected during this period is plentiful and has provided new insights into human behaviour when faced with the uncertainty of a novel and harmful disease. Using an online survey, Abadi et al., (2023) obtained data from 2031 participants from the UK, Spain, Germany and Netherlands. The authors report that they chose to include these specific countries on the basis that each differed significantly on the number of Covid-19 related deaths at the time of the survey completion, where Spain had the most number of cases, followed by the UK,the Netherlands and Germany. Moreover, the implementation of lockdown by these countries' respective governments and the socio-political attitudes within their differed. Participants who engaged with the survey completed measures on several variables of interest, such as socio-political attitudes, conspiracy mentality and perceptions of threat, to name a few.
 
 ## Data Origins
 
-The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article. 
+The original article was retrieved from the Journal of Open Psychology Data. Click [here](https://openpsychologydata.metajnl.com/articles/10.5334/jopd.86#4) to view the full article.
 
 The data and codebook was retrieved from the authors'*figshare* repository which is available [here](https://uvaauas.figshare.com/articles/dataset/A_Dataset_of_Social-Psychological_and_Emotional_Reactions_during_the_COVID-19_Pandemic_across_Four_European_Countries/17085719?file=41458140).
 
-The authors of the paper have indicated that their dataset is published under the CC BY-SA license. This allows the re-use of the data, provided that the original authors are acknowledged. 
+The authors of the paper have indicated that their dataset is published under the CC BY-SA license. This allows the re-use of the data, provided that the original authors are acknowledged.
 
 The URL is this visualisation project is [here](https://ijames8.github.io/covid/)
 
-The repository for these pages is: https://github.com/IJames8/covid.git
+The repository for these pages is: <https://github.com/IJames8/covid.git>
 
 ### Import the data
 
@@ -59,17 +60,15 @@ head(raw_data)
 # check that the data has imported properly. The number of observations and variables appears to be correct. 
 ```
 
-
 ## Research Question
 
-In reviewing the reuse potential of the data as suggested by the Abadi et al., (2013), this data visualisation project aims to investigate whether anxiety around the coronavirus, as indicated by the scores on the anxiety measure, is associated with an overestimation of various threats, such as those related to coronavirus, climate, symbolic/material or safety, as indicated by the scores on the threat estimation measure for each participant. 
-
+In reviewing the reuse potential of the data as suggested by the Abadi et al., (2013), this data visualisation project aims to investigate whether anxiety around the coronavirus, as indicated by the scores on the anxiety measure, is associated with an overestimation of various threats, such as those related to coronavirus, climate, symbolic/material or safety, as indicated by the scores on the threat estimation measure for each participant.
 
 ## Data Preparation
 
-For this particular visualisation, the codebook indicates that the variables of interest are items 5.1 -5.5. These relate to anxiety about coronavirus. It is important to note that item 5.3. is reverse coded. Variables 16.1 - 16.3 (threat estimation around cornoavirus) and 17.1 - 17.12 (threat estimation around climate, symbolic, material and safety) are also needed as these relate to the scores around threat estimation. Within this category, items 16.3, 16.4 and 17.10 are reverse coded.  
+For this particular visualisation, the codebook indicates that the variables of interest are items 5.1 -5.5. These relate to anxiety about coronavirus. It is important to note that item 5.3. is reverse coded. Variables 16.1 - 16.3 (threat estimation around cornoavirus) and 17.1 - 17.12 (threat estimation around climate, symbolic, material and safety) are also needed as these relate to the scores around threat estimation. Within this category, items 16.3, 16.4 and 17.10 are reverse coded.
 
-The remaining items will be removed from the dataframe, leaving only information about the relevant variables, along with annonymised participant ID and country. 
+The remaining items will be removed from the dataframe, leaving only information about the relevant variables, along with annonymised participant ID and country.
 
 ### Wrangle the data
 
@@ -182,17 +181,15 @@ data_summary <- data_summary %>%
 data_summary
 ```
 
-
 ## Visualisation
 
-The best way to visualise this data may be through a bar chart with the countries as the categorical variable and the questionnaire scores as continuous. With this, it is possible to check if the predictions made about the data,as stated previosly, are met. 
-
+The best way to visualise this data may be through a bar chart with the countries as the categorical variable and the questionnaire scores as continuous. With this, it is possible to check if the predictions made about the data,as stated previosly, are met.
 
 ```{r visualisation 1}
 
 # Create a bar chart of anxiety and threat estimation scores for each country.
 
-p <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
+p1 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
   geom_bar(stat = "identity", position = "dodge", colour = "black") +
   
   # Set Y-axis scale from 0 -10. 
@@ -217,15 +214,14 @@ p <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
     labels = c("Anxiety rating", "COVID-19 threat estimation", "General threat estimation")
   ) +
   
-  # Customise themes
   
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = "Times New Roman"),
-    plot.subtitle = element_text(hjust = 0.5, size = 12, family = "Times New Roman"),
-    plot.caption = element_text(hjust = 0, face = "italic", family = "Times New Roman"),
-    axis.title = element_text(size = 12, family = "Times New Roman"),
-    legend.title = element_text(size = 12, family = "Times New Roman"),
-    legend.text = element_text(size = 10, family = "Times New Roman"),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    plot.caption = element_text(hjust = 0, face = "italic"),
+    axis.title = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
     panel.background = element_rect(fill = "#ffffff", color = NA),
     
     # Remove the vertical grid lines
@@ -240,7 +236,7 @@ p <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
    
      # Adjust margins
     plot.margin = margin(10, 10, 10, 10))
-p
+p1
 
 
 # plot that with the weekly count cases of c-19 for each country. 
@@ -249,12 +245,15 @@ p
 
 ```
 
-As predicted, in looking at the average anxiety scores, Spain had marginally higher rating followed by the UK then Germany and Netherlands. In terms of average Covid-19 threat detection score, Spain had the highest scores, followed by the UK, Netherlands and Germany. In terms of general threat estimation, UK scored the highest and Spain the lowest.  
+```{r save first visualisation}
+#ggsave(here("visualisations/p1.png"))
+```
 
+As predicted, in looking at the average anxiety scores, Spain had marginally higher rating followed by the UK then Germany and Netherlands. In terms of average Covid-19 threat detection score, Spain had the highest scores, followed by the UK, Netherlands and Germany. In terms of general threat estimation, UK scored the highest and Spain the lowest.
 
 ### Import data (part 2)
 
-It will be helpful to see the relationship between these findings to that of the total number of  Covid- 19 related deaths for each country. According to Abadi et al., (2023) the data collection for their study took place in April 2020. The European Centre for Disease Prevention and Control (ECDC) provides data on the weekly number of Covid-19 related cases and deaths worldwide.The data for April 2020 is also reported and is available to download from their official website: https://www.ecdc.europa.eu/en/publications-data/download-historical-data-20-june-2022-weekly-number-new-reported-covid-19-cases
+It will be helpful to see the relationship between these findings to that of the total number of Covid- 19 related deaths for each country. According to Abadi et al., (2023) the data collection for their study took place in April 2020. The European Centre for Disease Prevention and Control (ECDC) provides data on the weekly number of Covid-19 related cases and deaths worldwide.The data for April 2020 is also reported and is available to download from their official website: <https://www.ecdc.europa.eu/en/publications-data/download-historical-data-20-june-2022-weekly-number-new-reported-covid-19-cases>
 
 ```{r import the weekly covid deaths data}
 
@@ -267,7 +266,7 @@ head(ecdc_raw)
 
 ### Wrangle the dataset
 
-This dataset has information on all the countries in the world. For the purpose of this visualisation, only the data for Germany, Netherlands, Spain and UK are needed. 
+This dataset has information on all the countries in the world. For the purpose of this visualisation, only the data for Germany, Netherlands, Spain and UK are needed.
 
 ```{r filter to relevant variables and tidy dataframe}
 
@@ -318,12 +317,11 @@ ecdc_summary
 
 ## Final Visualisation
 
-The final visualisation will comprise of the previous graph overlayed with the data around the of number of deaths for each of the four countries. 
-
+The final visualisation will comprise of the previous graph overlaid with the data around the of number of deaths for each of the four countries.
 
 ```{r visualisation 2}
 
-# Adding data around total number of deaths reported to the previous graph. 
+  # Adding data around total number of deaths reported to the previous graph. 
 
 p2 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
   # Bar chart layer
@@ -344,7 +342,7 @@ p2 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
     color = "red",
     linetype = "dashed",
     
-    # Remove the legend as the axis for the secondary axis will be red
+  # Remove the legend as the axis for the secondary axis will be red
     inherit.aes = FALSE,
     show.legend = FALSE) +
   
@@ -360,7 +358,7 @@ p2 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
   
   # Labels and colors
   labs(
-    title = "Visualisation of Social and Psychological Reactions During the Covid-19 Pandemic Across Four European Countries",
+    title = "Visualisation of Social and Psychological Reactions During the Covid-19\n Pandemic Across Four European Countries",
     subtitle = "Comparing anxiety levels and threat estimation in relation to Covid-19 and general threat",
     x = "Country",
     fill = "Questionnaire Items:  ",
@@ -374,66 +372,62 @@ p2 <- ggplot(data_summary, aes(x = Country, y = mean_score, fill = Variable)) +
   # Customise the themes
   
   theme(
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold", family = "Times New Roman"),
-    plot.subtitle = element_text(hjust = 0.5, size = 12, family = "Times New Roman"),
-    plot.caption = element_text(hjust = 0, face = "italic", family = "Times New Roman"), 
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12),
+    plot.caption = element_text(hjust = 0, face = "italic"), 
     
     
-    # Make the secondary axis and text red so it corresponds with the dashed red line for the death numbers. 
+  # Make the secondary axis and text red so it corresponds with the dashed red line for the death numbers. 
     axis.title.y.right = element_text(size = 12, color = "red"),  
     axis.text.y.right = element_text(color = "red"),
-    axis.title = element_text(size = 12, family = "Times New Roman"),
+    axis.title = element_text(size = 12),
     axis.ticks.x = element_blank(),
     
-    # Adjust the legend
-    legend.title = element_text(size = 12, family = "Times New Roman"),
-    legend.text = element_text(size = 7, family = "Times New Roman"),
-    legend.position = c(0.1, 0.82),
+  # Adjust the legend
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    legend.position = c(0.15, 0.82),
     legend.key = element_rect(colour = NA, fill = NA),
     
     
-   # Add white background
+ # Add white background
     panel.background = element_rect(fill = "#ffffff", colour = NA),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
    
-    # Keep horizontal lines
+  # Keep horizontal lines
     panel.grid.major.y = element_line(color = "grey", linewidth = 0.5),
     
-    # Adding a secondary horizontal line makes it easier to estimate the values on the y-axis. 
+  # Adding a secondary horizontal line makes it easier to estimate the values on the y-axis. 
     panel.grid.minor.y = element_line(color = "lightgrey", linewidth = 0.25),
     
-    #Adjust margins
+  #Adjust margins
     plot.margin = margin(30, 20, 20, 30))
 
 p2
 
 ```
+
 ```{r save the vidualisation}
-
+#ggsave(here("visualisations/p2.png"), width = 13, height = 8.5)
 ```
-
-
 
 ## Summary
 
-The results suggest that participants from Spain reported the highest levels of anxiety and the Netherlands reported the lowest levels according to the questionnaire results. Participants from Spain reported high levels of threat estimation in terms of Covid-19. 
+The results suggest that participants from Spain reported the highest levels of anxiety and the Netherlands reported the lowest levels according to the questionnaire results. Participants from Spain reported high levels of threat estimation in terms of Covid-19.
 
 An obvious difference that stood out from this visualisation is the total number of Covid-19 related deaths for each of the four countries. Abadi et al., (2023) reported that at the time of their survey, Spain had the highest number of deaths but the ECDC data indicates that the UK had the highest number of Covid-19 related deaths for the month of April 2020.
 
-The authors report that they obtained a representative sample from each of the countries (approximately 500 people from each country). From this data, there is no significant differences between the countries for these variables that can be observed. Future research may consider recruiting a larger sample which may produced much clearer distinction of the differences in scores. It may be that participant characteristics  may have impacted the outcomes on the survey, e.g., voluntary sample that was willing to complete the surveys. 
-
+The authors report that they obtained a representative sample from each of the countries (approximately 500 people from each country). From this data, there is no significant differences between the countries for these variables that can be observed. Future research may consider recruiting a larger sample which may produced much clearer distinction of the differences in scores. It may be that participant characteristics may have impacted the outcomes on the survey, e.g., voluntary sample that was willing to complete the surveys.
 
 ## Follow up
 
 This visualisation may be made better with the addition of an interactive element. I had attempted to make the graph interactive via ggplotly, however I found that this removed some of the helpful labels that I felt was important to the visualisation. It also seemed to remove the secondary axis. Although with the interactive plot, when the cursor hovers over the point, the information is provided, it was felt that this may be confusing at first glance without the secondary axis and may lead to the graph being read wrong.
 
-If additional data is acquired, for example, obtaining data from more countries in Europe and how the population levels of anxiety changed across may be good to vidualise in terms of an interactive line or bar chart. It will also be good to potentially visualise the information of all the countries in Europe in a map. 
+If additional data is acquired, for example, obtaining data from more countries in Europe and how the population levels of anxiety changed across may be good to visualise in terms of an interactive line or bar chart. It will also be good to potentially visualise the information of all the countries in Europe in a map.
 
 ## References
 
-Abadi, D., Arnaldo, I., & Fischer,A. (2023). A Dataset of SocialPsychological and EmotionalReactions During the COVID-19 Pandemic Across FourEuropean Countries. *Journal of Open Psychology Data*, 11:
-11, pp. 1–11. DOI: https://doi.org/10.5334/jopd.86
+Abadi, D., Arnaldo, I., & Fischer,A. (2023). A Dataset of SocialPsychological and EmotionalReactions During the COVID-19 Pandemic Across FourEuropean Countries. *Journal of Open Psychology Data*, 11: 11, pp. 1–11. DOI: <https://doi.org/10.5334/jopd.86>
 
-Miyah, Y., Benjelloun, M., Lairini, S., & Lahrichi, A. (2022). COVID-19 impact on public health, environment, human psychology, global socioeconomy, and education. *The Scientific World Journal*, 2022(5578284) 1-8. https://doi.org/10.1155/2022/5578284.
-
+Miyah, Y., Benjelloun, M., Lairini, S., & Lahrichi, A. (2022). COVID-19 impact on public health, environment, human psychology, global socioeconomy, and education. *The Scientific World Journal*, 2022(5578284) 1-8. <https://doi.org/10.1155/2022/5578284>.
