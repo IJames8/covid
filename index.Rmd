@@ -3,16 +3,15 @@ title: "Assessing whether there was an association between anxiety levels and th
   estimation during the Covid-19 pandemic across four European countries"
 Subtitle: 
 date: "2024-11-26"
-output:
-  pdf_document:
-    toc: true
-  html_document:
-    theme: cerulean
-    toc: true
-    toc_float: true
+output: 
+ html_document:
+   theme: cerulean 
+   toc: true
+   toc_float: true
+
 ---
 
-![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg) -->
+![](https://cdn.pixabay.com/photo/2020/07/13/16/19/corona-5401250_1280.jpg)
 
 ```{r setup, include= TRUE}
 knitr::opts_chunk$set(echo = TRUE)
